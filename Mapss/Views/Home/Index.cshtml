@@ -1,0 +1,119 @@
+﻿@model Mapss.Models.PaginaMapa
+
+@{
+    ViewBag.Title = "Index";
+    Estado e1 = new Estado(1,"estado1");
+    Estado e2 = new Estado(2,"estado2");
+    Estado e3 = new Estado(3,"estado3");
+    List<Estado> estados = new List<Estado>();
+    estados.Add(e1);
+    estados.Add(e2);
+    estados.Add(e3);
+
+}
+
+@using Mapss.Models;
+
+<h2>Mapa</h2>
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-info">
+            <!-- form start -->
+            <form id="frmBusquedaPuntos" method="post" class="form-horizontal" role="form">
+                <div class="box-body">
+                    @*input type="hidden" id="hdnPerfil" class="form-control" name="idperfil" value="@item.profileId" />*@
+                    <div class="form-group">
+                        <label for="ddlEstados" class="col-sm-1 control-label">Estado</label>
+                        <div class="col-sm-3">
+                            @Html.DropDownListFor(model => model.estadoId, new System.Web.Mvc.SelectList(estados, "estadoId", "estadoDesc"), "Seleccione", new { @class = "form-control", @id = "ddlEstados" })
+                        </div>
+                        <div class="col-sm-2">
+                            <button id="btnBuscar" type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="box-body">
+                <!-- Here goes the map -->
+                <div id="map"></div>
+                
+            </div>
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+
+@section styles{
+    <link rel="stylesheet" href="@Url.Content("~/Content/index.css")" />    
+
+    
+}
+
+@section scripts{
+    
+    <script src="@Url.Content("~/Scripts/app/index.js")"></script>
+    <script>
+        var map;
+        var initialCenter = { lat: -12.039, lng: -77.014 };
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: initialCenter,
+                zoom: 12
+            });
+            var marker;
+            var markerPosition;
+            var markerImage;
+            //fill the markers that comes from the model
+            debugger;
+            var points = @Html.Raw(Json.Encode(Model.puntos));
+            for (var i = 0; i < points.length; i++) {
+                debugger;
+                markerPosition = { lat: points[i].puntoY, lng: points[i].puntoX };
+                if(points[i].estadoId === 1){
+                    markerImage = '@Url.Content("~/Content/images/azul.png")';
+                } else {
+                    markerImage = '@Url.Content("~/Content/images/amarillo.png")';
+                }
+                marker = new google.maps.Marker({
+                            map: map,
+                            draggable: true,
+                            animation: google.maps.Animation.DROP,
+                            title: 'Hello World!',
+                            position: markerPosition,
+                            icon: markerImage
+                });
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7t38kS-Gkr1auv9mjnqDudcs-KWH6Kf0&callback=initMap" async defer></script>
+    
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
