@@ -74,11 +74,15 @@
             var marker;
             var markerPosition;
             var markerImage;
+            var contentString;
+            var contentStringList = [];
+            var infowindow = new google.maps.InfoWindow();
             //fill the markers that comes from the model
             var points = @Html.Raw(Json.Encode(Model.puntos));
             var pointsArray = [];
+            debugger;
             for (var i = 0; i < points.length; i++) {
-                
+                debugger;
                 markerPosition = { lat: points[i].puntoY, lng: points[i].puntoX };
                 if(points[i].estadoId === 1){
                     markerImage = '@Url.Content("~/Content/images/azul.png")';
@@ -89,11 +93,44 @@
                             map: map,
                             draggable: true,
                             animation: google.maps.Animation.DROP,
-                            title: 'Hello World!',
+                            title: points[i].information,
                             position: markerPosition,
                             icon: markerImage
                 });
+                
+                contentString = '<div id="content">'+
+                                '<div id="siteNotice">'+
+                                '</div>'+
+                                '<h1 id="firstHeading" class="firstHeading">Information</h1>'+
+                                '<div id="bodyContent">'+
+                                '<p> Coordenada x: ' + points[i].puntoX + '</p>' +
+                                '<p> Coordenada y: ' + points[i].puntoY + '</p>' +
+                                '<p> Sede: ' + points[i].information + '</p>' +
+                                '(last visited June 22, 2009).</p>'+
+                                '</div>'+
+                                '</div>';
+
+                contentStringList.push(contentString);
+
+                //marker.addListener('click', function() {
+                //    debugger;
+                //    infowindow.setContent(contentString);
+                //    infowindow.open(map, marker);
+                //});                
+
+                google.maps.event.addListener(marker,'click', (function(marker,i)
+                {
+                    return function()
+                    {
+                        infowindow.setContent(contentStringList[i]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker,i));
+
                 pointsArray.push(new google.maps.LatLng(points[i].puntoY, points[i].puntoX));
+
+                //contentString = null;
+                //infowindow = null;
             }
 
             heatmap = new google.maps.visualization.HeatmapLayer({
