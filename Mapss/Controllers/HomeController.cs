@@ -14,11 +14,16 @@ namespace Mapss.Controllers
         public ActionResult Index()
         {
             PaginaMapa pm = new PaginaMapa();
-            Punto p1 = new Punto(-77.041, -12.0555, 1, "sede principal");
-            Punto p2 = new Punto(-77.0365, -12.066, 1, "sucursal ventas");
-            Punto p3 = new Punto(-77.0694, -12.048, 1, "sucursal TI");
-            Punto p4 = new Punto(-77.0536, -12.0077, 2, "sucursal admin");
-            Punto p5 = new Punto(-76.97639, -12.09136, 2, "sucursal almacen");
+            //Punto p1 = new Punto(-77.041, -12.0555, 1, "sede principal");
+            //Punto p2 = new Punto(-77.0365, -12.066, 1, "sucursal ventas");
+            //Punto p3 = new Punto(-77.0694, -12.048, 1, "sucursal TI");
+            //Punto p4 = new Punto(-77.0536, -12.0077, 2, "sucursal admin");
+            //Punto p5 = new Punto(-76.97639, -12.09136, 2, "sucursal almacen");
+            Punto p1 = new Punto(-77.1245, -12.0418, 1, "sede principal");
+            Punto p2 = new Punto(-77.11046, -12.0705, 1, "sucursal ventas");
+            Punto p3 = new Punto(-77.1247, -12.0576, 1, "sucursal TI");
+            Punto p4 = new Punto(-77.11338, -12.0544, 2, "sucursal admin");
+            Punto p5 = new Punto(-77.0332, -12.0497, 2, "sucursal almacen");
             pm.puntos.Add(p1);
             pm.puntos.Add(p2);
             pm.puntos.Add(p3);

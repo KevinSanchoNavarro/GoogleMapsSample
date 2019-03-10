@@ -62,11 +62,12 @@
     <script src="@Url.Content("~/Scripts/app/index.js")"></script>
     <script>
         var map;
-        var initialCenter = { lat: -12.039, lng: -77.014 };
         var heatmap;
         function initMap() {
+            var points = @Html.Raw(Json.Encode(Model.puntos)); //get the points from the model
+
             map = new google.maps.Map(document.getElementById('map'), {
-                center: initialCenter,
+                center: { lat: points[0].puntoY, lng: points[0].puntoX },
                 zoom: 12,
                 mapTypeId: 'satellite'
             });
@@ -78,8 +79,9 @@
             var contentStringList = [];
             var infowindow = new google.maps.InfoWindow();
             //fill the markers that comes from the model
-            var points = @Html.Raw(Json.Encode(Model.puntos));
+
             var pointsArray = [];
+            var latlngbounds = new google.maps.LatLngBounds();
             debugger;
             for (var i = 0; i < points.length; i++) {
                 debugger;
@@ -97,7 +99,7 @@
                             position: markerPosition,
                             icon: markerImage
                 });
-                
+
                 contentString = '<div id="content">'+
                                 '<div id="siteNotice">'+
                                 '</div>'+
@@ -116,7 +118,7 @@
                 //    debugger;
                 //    infowindow.setContent(contentString);
                 //    infowindow.open(map, marker);
-                //});                
+                //});
 
                 google.maps.event.addListener(marker,'click', (function(marker,i)
                 {
@@ -128,10 +130,12 @@
                 })(marker,i));
 
                 pointsArray.push(new google.maps.LatLng(points[i].puntoY, points[i].puntoX));
-
-                //contentString = null;
-                //infowindow = null;
+                latlngbounds.extend(marker.position);
             }
+
+            //Center map and adjust Zoom based on the position of all markers.
+            map.setCenter(latlngbounds.getCenter());
+            map.fitBounds(latlngbounds);
 
             heatmap = new google.maps.visualization.HeatmapLayer({
                 data: pointsArray,
